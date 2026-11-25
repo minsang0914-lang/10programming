@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#e7f3fc" />
+    <meta name="color-scheme" content="light" />
+    <title>SVT · Smart Video Transfer</title>
+    <meta name="description" content="SVT는 동영상을 30fps GIF로 변환하는 Smart Video Transfer입니다." />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="top">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">SVT</div>
+          <div class="brand-text">
+            <strong>SVT</strong>
+            <em>Smart Video Transfer</em>
+          </div>
+        </div>
+        <div class="top-side">
+          <p class="top-copy">동영상 프레임을 30fps GIF로 옮깁니다</p>
+          <button type="button" class="btn ghost" id="open-storage">
+            웹저장소
+            <span class="storage-count" id="storage-count">0</span>
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <aside class="note error local-file-warning" id="local-file-warning" hidden role="alert">
+          <strong>파일 업로드를 사용하려면 웹사이트를 서버로 실행해야 합니다.</strong>
+          <span>이 화면을 index.html에서 직접 열면 브라우저가 편집 스크립트를 차단합니다. 이 창을 닫고 폴더의 <b>open-svt.bat</b>을 더블클릭해 주세요. 열린 웹페이지에서 파일을 다시 선택하면 업로드됩니다.</span>
+        </aside>
+        <section class="drop" id="drop" aria-label="동영상 업로드">
+          <div class="drop-hero">
+            <div class="drop-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                <path d="M12 16V5" stroke-linecap="round" />
+                <path d="M8 8.5 12 4.5l4 4" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M5 14.5V18a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3.5" stroke-linecap="round" />
+              </svg>
+            </div>
+            <h2>동영상을 GIF로</h2>
+            <p class="lead">가운데로 끌어다 놓거나 파일을 선택하세요. 올린 영상의 프레임을 30fps로 맞춰 GIF로 저장할 수 있습니다.</p>
+            <p>
+              <label class="btn primary" for="file-input">파일 선택</label>
+            </p>
+            <ul class="steps">
+              <li>1. 파일 추가</li>
+              <li>2. 30fps로 변환</li>
+              <li>3. 원하는 위치에 저장</li>
+            </ul>
+          </div>
+          <div class="drop-compact">
+            <p>다른 동영상도 이 영역으로 끌어오거나 선택해서 추가할 수 있습니다.</p>
+            <label class="btn ghost" for="file-input">파일 선택</label>
+          </div>
+        </section>
+        <input id="file-input" class="visually-hidden" type="file" accept="video/*,.mp4,.m4v,.webm,.mov,.mkv,.avi,.mpeg,.mpg,.3gp,.wmv" multiple />
+        <div class="section-bar" id="upload-bar" hidden>
+          <h2>업로드한 파일</h2>
+          <button type="button" class="btn ghost" id="reset-uploads">업로드 초기화</button>
+        </div>
+        <section class="files" id="files" aria-live="polite"></section>
+      </main>
+
+      <footer class="foot">
+        SVT · Smart Video Transfer. 파일은 서버로 전송되지 않고 이 브라우저 안에서만 변환됩니다.
+      </footer>
+    </div>
+
+    <div class="modal" id="storage-modal" hidden>
+      <div class="modal-backdrop" data-close-storage></div>
+      <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="storage-title">
+        <div class="section-bar modal-head">
+          <h2 id="storage-title">웹저장소</h2>
+          <div class="modal-tools">
+            <button type="button" class="btn ghost" id="reset-gallery">웹저장소 초기화</button>
+            <button type="button" class="modal-close" id="close-storage" aria-label="웹저장소 닫기">×</button>
+          </div>
+        </div>
+        <p class="gallery-empty" id="gallery-empty">임시저장한 GIF가 없습니다. 변환 후 임시저장을 누르면 이곳에 모입니다.</p>
+        <div class="gallery-grid" id="gallery-grid"></div>
+      </div>
+    </div>
+    <div class="drag-shield" aria-hidden="true">동영상을 여기에 놓으세요</div>
+    <div class="toast-root" id="toasts"></div>
+    <script>
+      if (window.location.protocol === "file:") {
+        document.querySelector("#local-file-warning").hidden = false;
+        document.querySelector("#file-input").disabled = true;
+        document.querySelector("#drop").classList.add("file-protocol-blocked");
+      }
+    </script>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
